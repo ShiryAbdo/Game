@@ -1,16 +1,25 @@
 package memory.game.kids.memory.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 
 import memory.game.kids.memory.PreferencesService;
 import memory.game.kids.memory.R;
 import memory.game.kids.memory.model.Memory;
+import memory.game.kids.memory.play.LevelsActivity;
 
 /**
  * MainActivity
@@ -68,17 +77,28 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     private Memory mMemory;
 //    private int mNotFoundResId;
     private MemoryGridView mGridView;
-    private static final String PREFS_NAME = "MemoryPrefsFile";
+    private static   String PREFS_NAME ;
+    Bundle bundle;
+    LinearLayout layoutTime ;
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
     public void onCreate(Bundle icicle)
     {
         super.onCreate(icicle);
+        bundle=getIntent().getExtras();
+        if(bundle!=null){
+            PREFS_NAME=bundle.getString("PREFS_NAME");
+        }
+        Toast.makeText(getApplicationContext(),PREFS_NAME ,Toast.LENGTH_LONG).show();
 
-        PreferencesService.init( this );
+        PreferencesService.init( this,PREFS_NAME );
+        layoutTime=(LinearLayout)findViewById(R.id.layoutTime);
+
+        if(PREFS_NAME.equals("Level_two")){
+            layoutTime.setVisibility(View.VISIBLE);
+        }else{
+            layoutTime.setVisibility(View.GONE);
+        }
         newGame();
 
     }
@@ -98,7 +118,8 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     @Override
     protected void newGame()
     {
-        int set = PreferencesService.instance().getIconsSet(); 
+        int set = PreferencesService.instance().getIconsSet();
+        Toast.makeText(getApplicationContext(),"Set  "+set ,Toast.LENGTH_LONG).show();
         mMemory = new Memory( icons_set[ set ], sounds , not_found_tile_set[ set ], this);
         mMemory.reset();
         mGridView = (MemoryGridView) findViewById(R.id.gridview);
@@ -187,10 +208,56 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
 //        SharedPreferences.Editor editor = preferences.edit();
 //        editor.clear();
 //        editor.commit();
-        Intent intent = new Intent( MainActivity.this,  PreferencesActivity.class);
+        Intent intent = new Intent( MainActivity.this,  LevelsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public class MyCountDownTimer extends CountDownTimer {
+
+        public MyCountDownTimer(long startTime, long interval) {
+
+
+            super(startTime, interval);
+
+        }
+
+        @Override
+
+        public void onFinish() {
+
+
+        }
+
+
+
+        @Override
+
+        public void onTick(long millisUntilFinished) {
+//            secondsRemaining = millisUntilFinished / 1000 ;
+//            mTimeRemaining=time_longe-secondsRemaining;
+////            if(secondsRemaining!=0)
+//
+//            last_time.setText(Long.toString(time_longe-secondsRemaining)+"  "+ "Sec");
+//            last_time.setText(" "+String.format("%02d:%02d",
+//                    TimeUnit.MILLISECONDS.toMinutes( mTimeRemaining*1000),
+//                    TimeUnit.MILLISECONDS.toSeconds(mTimeRemaining*1000) -
+//                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mTimeRemaining*1000))));
+//            timerText.setText(" "+String.format("%02d:%02d",
+//                    TimeUnit.MILLISECONDS.toMinutes( millisUntilFinished),
+//                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+//                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+//            if (secondsRemaining <= 10) {
+//                timerText.setTextColor(getResources().getColor(R.color.red));
+//            } else {
+//                timerText.setTextColor(Color.BLACK);
+//
+//
+//            }
+
+        }
+
     }
 
 }

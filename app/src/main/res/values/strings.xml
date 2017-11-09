@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">"Kids new "</string>
-    <string name="activity_title">"Kids Memory Game"</string>
+    <string name="activity_title">"Kids"</string>
     <string name="success_title">"Well Done!"</string>
     <string name="success">Your score is {0} moves.\n\nThe high score is {1} moves.</string>
     <string name="hiscore_title">"New High Score!</string>

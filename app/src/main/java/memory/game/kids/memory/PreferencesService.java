@@ -14,7 +14,7 @@ public class PreferencesService
     public static final int ICONS_SET_SPORTS = 2;
 	public static final int ICONS_SET_FOODS = 3;
     public static final int HISCORE_DEFAULT = 200;
-    private static final String PREFS_NAME = "MemoryPrefsFile";
+    private static   String PREFS_NAME ;
     private static final String PREF_BEST_MOVE_COUNT = "best_move_count";
     private static final String PREF_SOUND_ENABLED = "sound_enabled";
     private static final String PREF_ICONS_SET = "icons_set";
@@ -30,9 +30,11 @@ public class PreferencesService
         return mSingleton;
     }
 
-    public static void init(Context context)
+
+    public static void init(Context context ,String name)
     {
         mContext = context;
+        PREFS_NAME=name ;
     }
 
     public SharedPreferences getPrefs()

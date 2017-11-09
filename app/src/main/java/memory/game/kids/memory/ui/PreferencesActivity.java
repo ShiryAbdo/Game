@@ -13,28 +13,28 @@ import org.androidsoft.utils.ui.BasicActivity;
 
 import memory.game.kids.memory.PreferencesService;
 import memory.game.kids.memory.R;
+import memory.game.kids.memory.play.LevelsActivity;
 
 public class PreferencesActivity extends BasicActivity implements OnClickListener
 {
-     private CompoundButton mCbSoundEnabled;
-    private RadioButton mRbFruits;
+     private RadioButton mRbFruits;
     private RadioButton mRbHalloween;
     private RadioButton mRbSports;
 	private RadioButton mRbFoods;
     Button startB ;
-            
-    
-    /**
-     * {@inheritDoc }
-     */
+
+    //Create the bundle
+    Bundle bundle = new Bundle();
+//Add your data from getFactualResults method to bundle
+
+
     @Override
     public void onCreate(Bundle icicle)
     {
         super.onCreate(icicle);
-        PreferencesService.init( this );
-        setContentView( R.layout.settings);
+         setContentView( R.layout.settings);
         startB =  this.findViewById(R.id.idbutton);
-         updateHiScore();
+//         updateHiScore();
 
 
 
@@ -46,43 +46,42 @@ public class PreferencesActivity extends BasicActivity implements OnClickListene
         mRbSports.setOnClickListener(this);
 		mRbFoods = (RadioButton) findViewById(R.id.radio_mode_foods);
         mRbFoods.setOnClickListener(this);
-        int iconSet = PreferencesService.instance().getIconsSet();
-        if( iconSet == PreferencesService.ICONS_SET_FRUITS )
-        {
+//        int iconSet = PreferencesService.instance().getIconsSet();
+//        if( iconSet == PreferencesService.ICONS_SET_FRUITS )
+//        {
             mRbFruits.setChecked(true);
             mRbHalloween.setChecked(false);
             mRbSports.setChecked(false);
 			mRbFoods.setChecked(false);
-        }
-        else if ( iconSet == PreferencesService.ICONS_SET_HALLOWEEN )
-        {
-            mRbFruits.setChecked(false);
-            mRbHalloween.setChecked(true);
-            mRbSports.setChecked(false);
-			mRbFoods.setChecked(false);
-        }    
-        else if ( iconSet == PreferencesService.ICONS_SET_SPORTS )
-        {
-            mRbFruits.setChecked(false);
-            mRbHalloween.setChecked(false);
-            mRbSports.setChecked(true);
-			mRbFoods.setChecked(false);
-        } 
-		else if ( iconSet == PreferencesService.ICONS_SET_FOODS )
-        {
-            mRbFruits.setChecked(false);
-            mRbHalloween.setChecked(false);
-            mRbSports.setChecked(false);
-			mRbFoods.setChecked(true);
-        } 
+//        }
+//        else if ( iconSet == PreferencesService.ICONS_SET_HALLOWEEN )
+//        {
+//            mRbFruits.setChecked(false);
+//            mRbHalloween.setChecked(true);
+//            mRbSports.setChecked(false);
+//			mRbFoods.setChecked(false);
+//        }
+//        else if ( iconSet == PreferencesService.ICONS_SET_SPORTS )
+//        {
+//            mRbFruits.setChecked(false);
+//            mRbHalloween.setChecked(false);
+//            mRbSports.setChecked(true);
+//			mRbFoods.setChecked(false);
+//        }
+//		else if ( iconSet == PreferencesService.ICONS_SET_FOODS )
+//        {
+//            mRbFruits.setChecked(false);
+//            mRbHalloween.setChecked(false);
+//            mRbSports.setChecked(false);
+//			mRbFoods.setChecked(true);
+//        }
         
-        mCbSoundEnabled = (CompoundButton) findViewById(R.id.checkbox_sound);
-        mCbSoundEnabled.setOnClickListener(this);
-        mCbSoundEnabled.setChecked( PreferencesService.instance().isSoundEnabled() );
+  //        mCbSoundEnabled.setChecked( PreferencesService.instance().isSoundEnabled() );
         startB.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PreferencesActivity.this,MainActivity.class);
+                Intent intent = new Intent(PreferencesActivity.this,LevelsActivity.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -113,37 +112,38 @@ public class PreferencesActivity extends BasicActivity implements OnClickListene
      */
     public void onClick(View view)
     {
-       if ( view == mCbSoundEnabled )
+
+        if ( view == mRbFruits )
         {
-            PreferencesService.instance().saveSoundEnabled( mCbSoundEnabled.isChecked());
-        }
-        else if ( view == mRbFruits )
-        {
-            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_FRUITS );         
+            bundle.putInt("ICONS_SET", PreferencesService.ICONS_SET_FRUITS );
+//            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_FRUITS );
         }
         else if ( view == mRbHalloween )
         {
-            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_HALLOWEEN );           
+            bundle.putInt("ICONS_SET", PreferencesService.ICONS_SET_HALLOWEEN );
+//            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_HALLOWEEN );
         }
         else if ( view == mRbSports )
         {
-            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_SPORTS );           
+            bundle.putInt("ICONS_SET", PreferencesService.ICONS_SET_SPORTS);
+//            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_SPORTS );
         }
 		else if ( view == mRbFoods )
         {
-            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_FOODS );           
+            bundle.putInt("ICONS_SET", PreferencesService.ICONS_SET_FOODS );
+//            PreferencesService.instance().saveIconsSet( PreferencesService.ICONS_SET_FOODS );
         }
     }
 
     private void updateHiScore()
     {
-        int hiscore = PreferencesService.instance().getHiScore();
-        if( hiscore == PreferencesService.HISCORE_DEFAULT )
-        {
-         }
-        else
-        {
-         }
+//        int hiscore = PreferencesService.instance().getHiScore();
+//        if( hiscore == PreferencesService.HISCORE_DEFAULT )
+//        {
+//         }
+//        else
+//        {
+//         }
     }
 
     
