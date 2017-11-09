@@ -1,6 +1,8 @@
 package memory.game.kids.memory.model;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import org.androidsoft.utils.sound.SoundManager;
 
@@ -35,14 +37,20 @@ public class Memory
     private OnMemoryListener mListener;
     private static int[] mSounds;
     private int mTileVerso;
+     private  int count =0;
+     private int countting =0 ;
+     private  Context contextT ;
 
-    public Memory(int[] tiles, int[] sounds, int tile_verso, OnMemoryListener listener)
+
+
+    public Memory(int[] tiles, int[] sounds, int tile_verso, OnMemoryListener listener  , Context context)
     {
         mTiles = tiles;
         mSounds = sounds;
         mListener = listener;
         mTileVerso = tile_verso;
         Tile.setNotFoundResId(mTileVerso);
+        contextT=context ;
 
 
     }
@@ -123,6 +131,9 @@ public class Memory
         }
     }
 
+    public TileList getmList() {
+        return mList;
+    }
     private void initSounds()
     {
         SoundManager.instance().addSound(SOUND_FAILED, R.raw.youlose);
@@ -148,6 +159,12 @@ public class Memory
             // Same item clicked
             return;
         }
+        if(countting==0){
+            for(int i = 0 ; i <mList.size(); i ++){
+                mList.get(i).unselect();
+            }
+        }
+        countting++;
         mLastPosition = position;
         Tile tile = mList.get(position);
         tile.select();
@@ -161,6 +178,7 @@ public class Memory
                 break;
 
             case 1:
+
                 mT2 = tile;
                 if (mT1.getResId() == mT2.getResId())
                 {
@@ -171,11 +189,19 @@ public class Memory
                 }
                 else
                 {
-//                    playSound( SOUND_FAILED );
+                    mT1.unselect();
+                    playSound( SOUND_FAILED );
+                 int check =    count++;
+                 if(check==3){
+                     count=0 ;
+                     Toast.makeText(contextT,"new Game",Toast.LENGTH_LONG).show();
+                     reset();
+                 }
                 }
                 break;
 
             case 2:
+
                 if (mT1.getResId() != mT2.getResId())
                 {
                     mT1.unselect();

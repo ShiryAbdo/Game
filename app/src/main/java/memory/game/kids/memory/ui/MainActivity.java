@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,8 @@ import memory.game.kids.memory.PreferencesService;
 import memory.game.kids.memory.R;
 import memory.game.kids.memory.model.Memory;
 import memory.game.kids.memory.play.LevelsActivity;
+import memory.game.kids.memory.play.MemoryGridViewD;
+import memory.game.kids.memory.play.Memory_two;
 
 /**
  * MainActivity
@@ -76,7 +79,7 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
         R.drawable.not_found_fruits, R.drawable.not_found_halloween, R.drawable.not_found_sports, R.drawable.not_found_foods
     };
     private Memory mMemory;
-//    private int mNotFoundResId;
+    private  Memory_two memory_two ;
     private MemoryGridView mGridView;
     private static   String PREFS_NAME ;
     Bundle bundle;
@@ -84,9 +87,12 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     private long startTime ;
     private final long interval = 1 * 1000;
     public   CountDownTimer countDownTimer;
- TextView timeT ;
+    TextView timeT ;
     long secondsRemaining  ,mTimeRemaining;
     Dialog dialog;
+    MemoryGridViewD memoryGridViewDialoge ;
+    Dialog okdialog ;
+    int set ;
     @Override
     public void onCreate(Bundle icicle)
     {
@@ -101,7 +107,10 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
         timeT=(TextView)findViewById(R.id.time);
         layoutTime=(LinearLayout)findViewById(R.id.layoutTime);
         layoutTime.setVisibility(View.GONE);
-
+        set = PreferencesService.instance().getIconsSet();
+        Toast.makeText(getApplicationContext(),"Set  "+set ,Toast.LENGTH_LONG).show();
+        mMemory= new Memory( icons_set[ set], sounds , not_found_tile_set[ set], this ,MainActivity.this );
+        mMemory.reset();
         newGame();
 
     }
@@ -121,11 +130,8 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     @Override
     protected void newGame()
     {
-        int set = PreferencesService.instance().getIconsSet();
-        Toast.makeText(getApplicationContext(),"Set  "+set ,Toast.LENGTH_LONG).show();
-        mMemory = new Memory( icons_set[ set ], sounds , not_found_tile_set[ set ], this);
-        mMemory.reset();
-        mGridView = (MemoryGridView) findViewById(R.id.gridview);
+
+         mGridView = (MemoryGridView) findViewById(R.id.gridview);
         mGridView.setMemory(mMemory);
         drawGrid();
     }
@@ -157,6 +163,27 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     @Override
     protected void cancleTime() {
         countDownTimer.cancel();
+
+    }
+
+    @Override
+    protected void dialoge() {
+        okdialog = new Dialog(this, R.style.custom_dialog_theme);
+        okdialog.setContentView(R.layout.activity_show_images);
+        memoryGridViewDialoge =(MemoryGridViewD)okdialog.findViewById(R.id.gridview_Dialode);
+        memory_two= new Memory_two(mMemory);
+        memory_two.reset();
+        memoryGridViewDialoge.setMemory(memory_two);
+        okdialog.show();
+
+                 new Handler().postDelayed(new Runnable() {
+                      @Override
+                     public void run() {
+                          okdialog.dismiss();
+                          okdialog.cancel();
+                }
+                }, 9000);
+
 
     }
 

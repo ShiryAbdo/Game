@@ -16,7 +16,7 @@ public class TileList extends ArrayList<Tile>
     /**
      * Constructor
      */
-    TileList()
+    public TileList()
     {
     }
 
@@ -24,7 +24,7 @@ public class TileList extends ArrayList<Tile>
      * Constructeur
      * @param serialized A serialized list
      */
-    TileList(String serialized)
+    public TileList(String serialized)
     {
         try
         {

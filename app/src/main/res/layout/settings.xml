@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="#f0e2ff"
         android:orientation="vertical" >
-  >
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -53,14 +53,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/radio_mode_halloween"
                 android:textColor="#8a62b7" />
-            
+
             <RadioButton
                 android:id="@+id/radio_mode_sports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/radio_mode_sports"
                 android:textColor="#8a62b7" />
-            
+
             <RadioButton
                 android:id="@+id/radio_mode_foods"
                 android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
                 android:text="@string/radio_mode_foods"
                 android:textColor="#8a62b7" />
         </RadioGroup>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -88,8 +88,8 @@
             android:text="Start TO play "
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-                
-        
+
+
     </LinearLayout>
 
 </ScrollView>

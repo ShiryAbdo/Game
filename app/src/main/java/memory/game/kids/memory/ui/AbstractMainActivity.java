@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,6 +54,7 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
     protected abstract void preferences();
     protected abstract void startTime();
     protected abstract void cancleTime();
+    protected abstract   void dialoge ();
     
     /**
      * {@inheritDoc }
@@ -309,6 +311,13 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
                 public void onAnimationEnd(Animation animation) {
                     startTime();
                     Toast.makeText(getApplicationContext(),"ended" ,Toast.LENGTH_LONG).show();
+                                new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dialoge();
+
+                    }
+                }, 2000);
 
                 }
 
