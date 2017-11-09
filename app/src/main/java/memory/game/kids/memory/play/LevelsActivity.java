@@ -46,6 +46,7 @@ public class LevelsActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
 
         }else if(view==LevelTwo){
+            PreferencesService.init( this,"Level_two");
              PreferencesService.instance().saveIconsSet(ICONS_SET );
             Intent intent = new Intent(LevelsActivity.this, MainActivity.class);
             intent.putExtra("PREFS_NAME" ,"Level_two");
@@ -53,6 +54,7 @@ public class LevelsActivity extends AppCompatActivity implements View.OnClickLis
 
 
         }else if(view==levelThree){
+            PreferencesService.init( this,"Level_three" );
              PreferencesService.instance().saveIconsSet(ICONS_SET );
             Intent intent = new Intent(LevelsActivity.this, MainActivity.class);
             intent.putExtra("PREFS_NAME" ,"Level_three");

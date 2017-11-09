@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -80,7 +81,12 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     private static   String PREFS_NAME ;
     Bundle bundle;
     LinearLayout layoutTime ;
-
+    private long startTime ;
+    private final long interval = 1 * 1000;
+    public   CountDownTimer countDownTimer;
+ TextView timeT ;
+    long secondsRemaining  ,mTimeRemaining;
+    Dialog dialog;
     @Override
     public void onCreate(Bundle icicle)
     {
@@ -90,15 +96,12 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
             PREFS_NAME=bundle.getString("PREFS_NAME");
         }
         Toast.makeText(getApplicationContext(),PREFS_NAME ,Toast.LENGTH_LONG).show();
-
+        countDownTimer = new MyCountDownTimer(startTime, interval);
         PreferencesService.init( this,PREFS_NAME );
+        timeT=(TextView)findViewById(R.id.time);
         layoutTime=(LinearLayout)findViewById(R.id.layoutTime);
+        layoutTime.setVisibility(View.GONE);
 
-        if(PREFS_NAME.equals("Level_two")){
-            layoutTime.setVisibility(View.VISIBLE);
-        }else{
-            layoutTime.setVisibility(View.GONE);
-        }
         newGame();
 
     }
@@ -136,6 +139,25 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
     {
         Intent intent = new Intent( this , PreferencesActivity.class );
         startActivity(intent);
+    }
+
+    @Override
+    protected void startTime() {
+        if(PREFS_NAME.equals("Level_two")){
+            layoutTime.setVisibility(View.VISIBLE);
+            startTime=  60 * 1000;
+            timeT.setText(String.valueOf(startTime / 1000));
+            countDownTimer = new MyCountDownTimer(startTime, interval);
+            countDownTimer.start();
+        }else{
+            layoutTime.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void cancleTime() {
+        countDownTimer.cancel();
+
     }
 
     /**
@@ -204,6 +226,7 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
 
     @Override
     public void onBackPressed() {
+        cancleTime();
 //        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = preferences.edit();
 //        editor.clear();
@@ -227,6 +250,24 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
 
         public void onFinish() {
 
+            dialog= new Dialog(MainActivity.this, R.style.custom_dialog_theme);
+            dialog.setContentView(R.layout.time_up);
+            TextView text =(TextView)dialog.findViewById(R.id.text);
+             text.setText("Time's up!");
+            Button dialogButton = (Button) dialog.findViewById(R.id.backtoMenu);
+             dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(getApplicationContext(),PreferencesActivity.class);
+                     startActivity(intent);
+                    finish();
+
+                }
+            });
+
+            dialog.show();
+
 
         }
 
@@ -235,29 +276,34 @@ public class MainActivity extends AbstractMainActivity implements Memory.OnMemor
         @Override
 
         public void onTick(long millisUntilFinished) {
-//            secondsRemaining = millisUntilFinished / 1000 ;
-//            mTimeRemaining=time_longe-secondsRemaining;
-////            if(secondsRemaining!=0)
-//
-//            last_time.setText(Long.toString(time_longe-secondsRemaining)+"  "+ "Sec");
-//            last_time.setText(" "+String.format("%02d:%02d",
-//                    TimeUnit.MILLISECONDS.toMinutes( mTimeRemaining*1000),
-//                    TimeUnit.MILLISECONDS.toSeconds(mTimeRemaining*1000) -
-//                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mTimeRemaining*1000))));
-//            timerText.setText(" "+String.format("%02d:%02d",
-//                    TimeUnit.MILLISECONDS.toMinutes( millisUntilFinished),
-//                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-//                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
-//            if (secondsRemaining <= 10) {
-//                timerText.setTextColor(getResources().getColor(R.color.red));
-//            } else {
-//                timerText.setTextColor(Color.BLACK);
-//
-//
-//            }
+            secondsRemaining = millisUntilFinished / 1000 ;
+
+            timeT.setText(" "+String.format("%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes( millisUntilFinished),
+                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+            if (secondsRemaining <= 10) {
+                timeT.setTextColor(getResources().getColor(R.color.red));
+            } else {
+                timeT.setTextColor(Color.BLACK);
+
+
+            }
 
         }
 
+    }
+
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        cancleTime();
+         super.onDestroy();
     }
 
 }

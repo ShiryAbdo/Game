@@ -17,6 +17,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.androidsoft.utils.sound.SoundManager;
 
@@ -50,6 +51,8 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
     protected abstract void newGame();
 
     protected abstract void preferences();
+    protected abstract void startTime();
+    protected abstract void cancleTime();
     
     /**
      * {@inheritDoc }
@@ -105,7 +108,7 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
     protected void onPause()
     {
         super.onPause();
-
+        cancleTime();
         SharedPreferences.Editor editor = getPreferences(0).edit();
         if (!mQuit)
         {
@@ -166,6 +169,7 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
      */
     void quit()
     {
+        cancleTime();
         mQuit = true;
         AbstractMainActivity.this.finish();
     }
@@ -183,6 +187,7 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
 
     protected void showEndDialog(String title, String message, int icon)
     {
+        cancleTime();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setIcon(icon);
@@ -236,6 +241,7 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
         rotation.setAnimationListener(new DisplayNextView());
 
         mContainer.startAnimation(rotation);
+
 
     }
 
@@ -293,7 +299,25 @@ public abstract class AbstractMainActivity extends Activity implements OnClickLi
             rotation.setInterpolator(new DecelerateInterpolator());
 
             mContainer.startAnimation(rotation);
-            mStarted = true;
+            rotation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    Toast.makeText(getApplicationContext(),"started" ,Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    startTime();
+                    Toast.makeText(getApplicationContext(),"ended" ,Toast.LENGTH_LONG).show();
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+//            mStarted = true;
         }
     }
 
